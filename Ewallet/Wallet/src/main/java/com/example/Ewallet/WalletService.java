@@ -24,7 +24,7 @@ public class WalletService {
 
     }
 
-   public Wallet addAmount(WalletEntryDto walletEntryDto) throws UserNotFoundException {
+   public void addAmount(WalletEntryDto walletEntryDto) throws UserNotFoundException {
        Wallet newWallet;
        Wallet userExists = walletRepository.findByUserName(walletEntryDto.getUserName());
        //System.out.println( walletEntryDto.getAmount());
@@ -45,9 +45,33 @@ public class WalletService {
                    .userName(walletEntryDto.getUserName())
                    .password(walletEntryDto.getPassword())
                    .build();
-          newWallet=walletRepository.save(newWallet);
+            walletRepository.save(newWallet);
        }
-       return newWallet;
+
    }
+
+    public void withdrawnAmount(WalletEntryDto walletEntryDto) throws UserNotFoundException {
+        Wallet newWallet;
+        Wallet userExists = walletRepository.findByUserName(walletEntryDto.getUserName());
+
+        if (userExists == null)
+            throw new UserNotFoundException("User Not Found..!!");
+
+        if (!walletEntryDto.getPassword().equals(userExists.getPassword())) {
+            throw new UserNotFoundException("Invalid password...!");
+        }
+        else {
+            int newAmount = userExists.getAmount() - walletEntryDto.getAmount();
+
+            newWallet = Wallet.builder()
+                    .id(userExists.getId())
+                    .amount(newAmount)
+                    .userName(walletEntryDto.getUserName())
+                    .password(walletEntryDto.getPassword())
+                    .build();
+            walletRepository.save(newWallet);
+        }
+
+    }
 
 }

@@ -21,4 +21,9 @@ public class WalletController {
         walletService.addAmount(walletEntryDto);
         return new ResponseEntity<>("wallet updated successfully",HttpStatus.CREATED);
     }
+    @PutMapping("/withdrawnAmount")
+    public ResponseEntity<String> withdrawnAmount(@RequestBody WalletEntryDto walletEntryDto) throws UserNotFoundException {
+        walletService.withdrawnAmount(walletEntryDto);
+        return new ResponseEntity<>("wallet updated successfully",HttpStatus.CREATED);
+    }
 }
